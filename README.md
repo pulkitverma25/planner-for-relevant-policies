@@ -76,3 +76,25 @@ Options:
 --debug-output 1/0
     Output plans and other information during the planning process.
 ```
+
+# Changes by Pulkit
+
+Was getting the error:
+
+```
+$ ./build_all 
+make: Nothing to be done for 'default'.
+g++ -Iext -g -m32 -Wall -W -Wno-sign-compare -Wno-deprecated -Wuninitialized -ansi -pedantic -Werror -O3 -DNDEBUG -fomit-frame-pointer -c landmarks/exploration.cc -o .obj/landmarks/exploration.release.o
+In file included from landmarks/exploration.cc:1:
+landmarks/exploration.h: In constructor ‘Exploration::Exploration(const Options&)’:
+landmarks/exploration.h:20:8: error: ‘<anonymous>.ExProposition::var’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
+   20 | struct ExProposition {
+      |        ^~~~~~~~~~~~~
+landmarks/exploration.h:20:8: error: ‘<anonymous>.ExProposition::val’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
+landmarks/exploration.h:20:8: error: ‘<anonymous>.ExProposition::depth’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
+cc1plus: all warnings being treated as errors
+make: *** [Makefile:327: .obj/landmarks/exploration.release.o] Error 1
+
+```
+
+To solve this added `-Wno-maybe-uninitialized` flag in `src/search/Makefile`
